@@ -9,11 +9,12 @@ const days = document.querySelector("[data-days]")
 const hours = document.querySelector("[data-hours]")
 const min = document.querySelector("[data-minutes]")
 const sec = document.querySelector("[data-seconds]")
-
 const input = document.getElementById("datetime-picker"); 
 const startBtn = document.querySelector("[data-start]")
-let userSelectedDate = null
 
+
+let userSelectedDate = null
+let interval = null
 startBtn.addEventListener("click", handleClick)
 
 function validateSelectedDate() {
@@ -28,6 +29,11 @@ function validateSelectedDate() {
     
 });
         startBtn.disabled = true; 
+
+        if (interval) {
+            clearInterval(interval); 
+        }
+
     } else {
         startBtn.disabled = false; 
     }
@@ -37,15 +43,14 @@ function validateSelectedDate() {
 startBtn.disabled = true; 
 
 function handleClick() {
-    let interval = setInterval(()=> {
+    if (interval) clearInterval(interval);
+
+    interval = setInterval(()=> {
         let time = Date.now()
         let needToWait = userSelectedDate - time
-        if (userSelectedDate === time) {
-            startBtn.disabled = true; 
-        }
-
         if (needToWait <= 0) {
             clearInterval(interval)
+            startBtn.disabled = true; 
         }
 
         let converted = convertMs(needToWait)
@@ -54,6 +59,7 @@ function handleClick() {
         min.textContent = addLeadingZero(converted.minutes)
         sec.textContent = addLeadingZero(converted.seconds)
         input.disabled = true
+        startBtn.disabled = true; 
     },1000)
    
 }
