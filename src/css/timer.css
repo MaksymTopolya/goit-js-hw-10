@@ -21,18 +21,19 @@ body {
 }
 
 .btn {
-    background-color: #00ced1;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    height: 42px;
+    /* padding: 10px 20px;
+        font-size: 16px;
+        border: 2px solid #007bff;
+        color: #007bff;
+        background-color: #fff;
+        cursor: pointer; */
 }
 
-.btn:hover {
-    background-color: #008b8b;
+.btn.disabled {
+    /* opacity: 0.5;
+border: 2px solid #fff;
+    cursor: not-allowed; */
+   
 }
 
 

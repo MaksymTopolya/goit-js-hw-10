@@ -16,8 +16,9 @@ let userSelectedDate = null
 
 startBtn.addEventListener("click", handleClick)
 
-function closeModal(params) {
-    if (userSelectedDate < Date.now()) {
+function validateSelectedDate() {
+    var currentDate = new Date();
+    if (userSelectedDate.getTime() < currentDate.getTime()) {
         iziToast.show({
     title: 'Hey',
     message: 'Please choose a date in the future',
@@ -33,11 +34,15 @@ function closeModal(params) {
 
 }
 
+startBtn.disabled = true; 
 
-function handleClick(params) {
+function handleClick() {
     let interval = setInterval(()=> {
         let time = Date.now()
         let needToWait = userSelectedDate - time
+        if (userSelectedDate === time) {
+            startBtn.disabled = true; 
+        }
 
         if (needToWait <= 0) {
             clearInterval(interval)
@@ -86,7 +91,7 @@ const options = {
   minuteIncrement: 1,
     onClose(selectedDates) {
         userSelectedDate = selectedDates[0]
-        closeModal()
+        validateSelectedDate()
     console.log(selectedDates[0]);
   },
 };
