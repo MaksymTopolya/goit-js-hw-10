@@ -20,7 +20,7 @@ startBtn.addEventListener("click", handleClick)
 function validateSelectedDate() {
     var currentDate = new Date();
     if (userSelectedDate.getTime() < currentDate.getTime()) {
-        iziToast.show({
+        iziToast.error({
     title: 'Hey',
     message: 'Please choose a date in the future',
             theme: 'dark',
@@ -45,24 +45,31 @@ startBtn.disabled = true;
 function handleClick() {
     if (interval) clearInterval(interval);
 
-    interval = setInterval(()=> {
-        let time = Date.now()
-        let needToWait = userSelectedDate - time
-        if (needToWait <= 0) {
-            clearInterval(interval)
-            startBtn.disabled = true; 
+    interval = setInterval(() => {
+        const currentTime = Date.now();
+        const remainingTime = userSelectedDate - currentTime;
+
+        if (remainingTime <= 0) {
+            clearInterval(interval);
+            updateTimerDisplay(0, 0, 0, 0);
+            startBtn.disabled = true;
+            return; 
         }
 
-        let converted = convertMs(needToWait)
-        days.textContent = addLeadingZero(converted.days)
-        hours.textContent = addLeadingZero(converted.hours)
-        min.textContent = addLeadingZero(converted.minutes)
-        sec.textContent = addLeadingZero(converted.seconds)
-        input.disabled = true
-        startBtn.disabled = true; 
-    },1000)
-   
+        const convertedTime = convertMs(remainingTime);
+        console.log(convertedTime)
+        updateTimerDisplay(convertedTime.days, convertedTime.hours, convertedTime.minutes, convertedTime.seconds);
+        startBtn.disabled = true;
+    }, 1000);
 }
+
+function updateTimerDisplay(days, hours, minutes, seconds) {
+    document.querySelector("[data-days]").textContent = addLeadingZero(days);
+    document.querySelector("[data-hours]").textContent = addLeadingZero(hours);
+    document.querySelector("[data-minutes]").textContent = addLeadingZero(minutes);
+    document.querySelector("[data-seconds]").textContent = addLeadingZero(seconds);
+}
+
 
 function addLeadingZero(value) {
     return String(value).padStart(2, '0');
